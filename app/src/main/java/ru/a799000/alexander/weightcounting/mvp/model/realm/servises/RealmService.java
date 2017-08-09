@@ -1,16 +1,18 @@
-package ru.a799000.alexander.weightcounting.mvp.model.realm;
+package ru.a799000.alexander.weightcounting.mvp.model.realm.servises;
 
-import java.util.List;
+        import java.util.List;
 
-import io.reactivex.Completable;
-import io.reactivex.Observable;
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
-import io.realm.RealmModel;
-import io.realm.RealmQuery;
-import io.realm.RealmResults;
-import ru.a799000.alexander.weightcounting.intities.Product;
-import ru.a799000.alexander.weightcounting.mvp.model.realm.migration.RealmMigration;
+        import io.reactivex.Completable;
+        import io.reactivex.Observable;
+        import io.realm.Realm;
+        import io.realm.RealmConfiguration;
+        import io.realm.RealmModel;
+        import io.realm.RealmQuery;
+        import io.realm.RealmResults;
+        import ru.a799000.alexander.weightcounting.intities.Product;
+        import ru.a799000.alexander.weightcounting.mvp.model.realm.DBservise;
+        import ru.a799000.alexander.weightcounting.mvp.model.realm.RealmTable;
+        import ru.a799000.alexander.weightcounting.mvp.model.realm.migration.RealmMigration;
 
 /**
  * Created by user on 07.08.2017.
@@ -20,6 +22,7 @@ public class RealmService implements DBservise {
 
     Realm mRealm;
     RealmConfiguration mConfig;
+
 
     public RealmService() {
 
@@ -139,28 +142,25 @@ public class RealmService implements DBservise {
             mRealm = Realm.getInstance(mConfig);
         }
 
-        try {
-            return Completable.fromAction(() -> {
-                Product product = mRealm.where(Product.class).equalTo(RealmTable.ID, id).findFirst();
-                product.deleteFromRealm();
 
-            })
-                    .doOnSubscribe(disposable -> {
-                        mRealm.beginTransaction();
-                    })
-                    .doOnComplete(() -> {
-                        mRealm.commitTransaction();
-                    })
-                    .doOnError(throwable -> {
-                        mRealm.cancelTransaction();
-                    })
-                    .doFinally(() -> {
-                        mRealm.close();
-                    });
+        return Completable.fromAction(() -> {
 
-        } catch (Exception e) {
-            return Completable.error(e);
-        }
+            mRealm.where(Product.class).equalTo(RealmTable.ID, id).findFirst().deleteFromRealm();
+
+        })
+                .doOnSubscribe(disposable -> {
+                    mRealm.beginTransaction();
+                })
+                .doOnComplete(() -> {
+                    mRealm.commitTransaction();
+                })
+                .doOnError(throwable -> {
+                    mRealm.cancelTransaction();
+                })
+                .doFinally(() -> {
+                    mRealm.close();
+                });
+
 
     }
 
@@ -171,30 +171,27 @@ public class RealmService implements DBservise {
             mRealm = Realm.getInstance(mConfig);
         }
 
-        try {
-            return Completable.fromAction(() -> {
+        return Completable.fromAction(() -> {
 
-                RealmQuery<Product> query = mRealm.where(Product.class);
-                RealmResults<Product> results = query.findAll();
-                results.deleteAllFromRealm();
+            RealmQuery<Product> query = mRealm.where(Product.class);
+            RealmResults<Product> results = query.findAll();
+            results.deleteAllFromRealm();
 
-            })
-                    .doOnSubscribe(disposable -> {
-                        mRealm.beginTransaction();
-                    })
-                    .doOnComplete(() -> {
-                        mRealm.commitTransaction();
-                    })
-                    .doOnError(throwable -> {
-                        mRealm.cancelTransaction();
-                    })
-                    .doFinally(() -> {
-                        mRealm.close();
-                    });
+        })
+                .doOnSubscribe(disposable -> {
+                    mRealm.beginTransaction();
+                })
+                .doOnComplete(() -> {
+                    mRealm.commitTransaction();
+                })
+                .doOnError(throwable -> {
+                    mRealm.cancelTransaction();
+                })
+                .doFinally(() -> {
+                    mRealm.close();
+                });
 
-        } catch (Exception e) {
-            return Completable.error(e);
-        }
+
     }
 
 

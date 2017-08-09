@@ -8,8 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import io.realm.Realm;
-import ru.a799000.alexander.weightcounting.intities.Barcode;
 import ru.a799000.alexander.weightcounting.intities.Product;
+import ru.a799000.alexander.weightcounting.mvp.model.realm.servises.RealmService;
 
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.*;
@@ -63,26 +63,26 @@ public class RealmServiceTest {
 
         mRealmService.save(product)
                 .subscribe(p -> {
-                    Log.d("anit","add: " + p.toString());
+                    Log.d("anit", "add: " + p.toString());
                     assertTrue(true);
                 });
 
         mRealmService.save(product1)
                 .subscribe(p -> {
-                    Log.d("anit","add: " + p.toString());
+                    Log.d("anit", "add: " + p.toString());
                     assertTrue(true);
                 });
 
         mRealmService.save(product2)
                 .subscribe(p -> {
-                    Log.d("anit","add: " + p.toString());
+                    Log.d("anit", "add: " + p.toString());
                     assertTrue(true);
                 });
 
 
         mRealmService.getAll()
                 .subscribe(products -> {
-                    Log.d("anit","products: " + products.toString());
+                    Log.d("anit", "getAll products: " + products.toString());
                     assertTrue(products.size() == 3);
                 });
 
@@ -96,7 +96,7 @@ public class RealmServiceTest {
                 .subscribe(p -> {
                     assertTrue(false);
                 }, throwable -> {
-                    Log.d("anit", "id = 28: " + throwable.getMessage());
+                    Log.d("anit", "get(28): " + throwable.getMessage());
                     assertTrue(true);
                 }, () -> {
                     assertTrue(false);
@@ -105,95 +105,34 @@ public class RealmServiceTest {
 
         mRealmService.dell(3)
                 .subscribe(() -> {
+                    Log.d("anit", "dell(3): ");
                     assertTrue(true);
-                },throwable -> {
-                    Log.d("anit", "id = 28: " + throwable.getMessage());
+                }, throwable -> {
+                    Log.d("anit", "dell(3): " + throwable.getMessage());
                     assertTrue(false);
                 });
-//
-//
-//        mRealmService.get(28)
-//                .subscribe(p -> {
-//                    assertTrue(false);
-//                }, throwable -> {
-//                    Log.d("anit", "id = 28: " + throwable.getMessage());
-//                    assertTrue(true);
-//                }, () -> {
-//                    assertTrue(false);
-//                });
 
-
-
-
-
-    }
-
-
-    public void save() throws Exception {
-
-        Product product = Product.getBuilder()
-                .name("Товар")
-                .build();
-
-
-        Barcode barcode = Barcode.getBuilder().setBarcode("222").build();
-
-
-        mRealmService.save(product)
-                .subscribe(p -> {
-
-                    assertEquals(p.getName(), product.getName());
-
-                });
-
-    }
-
-
-    public void getAll() throws Exception {
-        mRealmService.getAll()
-                .subscribe(products -> {
-                    assertTrue(products.size() != 0);
-
-                }, throwable -> {
-                }, () -> {
-                    assertTrue(true);
-                });
-
-    }
-
-
-    public void get() throws Exception {
-        mRealmService.get(28)
-                .subscribe(p -> {
-                    assertTrue(true);
-                }, throwable -> {
-                    assertTrue(true);
-                }, () -> {
-                    assertTrue(true);
-                });
-
-    }
-
-
-    public void dell() throws Exception {
-        mRealmService.dell(2)
+        mRealmService.dell(28)
                 .subscribe(() -> {
-                    assertTrue(true);
-
+                    Log.d("anit", "dell(28): ");
+                    assertTrue(false);
                 }, throwable -> {
+                    Log.d("anit", "dell(28): " + throwable.getMessage());
                     assertTrue(true);
                 });
-    }
 
 
-    public void dellAll() throws Exception {
         mRealmService.dellAll()
                 .subscribe(() -> {
+                    Log.d("anit", "dellALL: ");
                     assertTrue(true);
-
                 }, throwable -> {
-                    assertTrue(true);
+                    Log.d("anit", "dellALL: ");
+                    assertTrue(false);
                 });
+
+
     }
+
 
 }
